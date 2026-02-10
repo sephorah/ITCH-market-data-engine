@@ -7,13 +7,13 @@ install() {
 }
 
 build() {
-    echo "Building Market Data Dissemination Simulator with CMake..."
+    echo "Building ITCH Market Data Engine with CMake..."
     cmake --build --preset conan-release
     make -C build/Release
 }
 
 clean() {
-    echo "Cleaning Market Data Dissemination Simulator..."
+    echo "Cleaning ITCH Market Data Engine..."
     cmake --build --target clean --preset conan-release
     rm -f MarketDataSimulatorServer
     echo "Done."
