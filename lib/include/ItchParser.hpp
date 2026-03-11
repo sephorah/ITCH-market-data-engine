@@ -2,6 +2,10 @@
 #define ITCHPARSER_HPP_
 
 #include <iostream>
+#include <string>
+#include <type_traits>
+#include "ItchMessages.hpp"
+#include "Byteswap.hpp"
 
 namespace Itch
 {
@@ -12,49 +16,72 @@ namespace Itch
         Truncated,
     };
 
+    struct ParseResult
+    {
+        ParseStatus status;
+        std::size_t bytes;
+    };
+
     template <typename MsgType, typename Handler>
-    ParseStatus parseAs(const char *buffer, std::size_t length, Handler &&handler)
+    ParseResult parseAs(const char *buffer, std::size_t length, Handler &&handler)
     {
         if (length < sizeof(MsgType))
         {
-            return ParseStatus::Truncated;
+            ParseResult result{
+                .status = ParseStatus::Truncated,
+                .bytes = length,
+            };
+            return result;
         }
         MsgType message{*reinterpret_cast<const MsgType *>(buffer)};
         networkToHost(message);
         handler(message);
-        return ParseStatus::OK;
+        ParseResult result{
+            .status = ParseStatus::OK,
+            .bytes = sizeof(MsgType),
+        };
+        return result;
     }
 
     template <typename Handler>
-    ParseStatus parse(const char *message, size_t length, Handler &&handler)
+    ParseResult parse(const char *message, size_t length, Handler &&handler)
     {
         if (length < 1)
         {
-            return ParseStatus::Truncated;
+            ParseResult result{
+                .status = ParseStatus::Truncated,
+                .bytes = length};
+            return result;
         }
         switch (MessageType(message[0]))
         {
         case MessageType::AddOrder:
-            return parseAs<AddOrder>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::AddOrderMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::AddOrderMPID:
-            return parseAs<AddOrderMPID>(message, length, std::forward<Handler>(handler));
-            return parseAs<OrderExecuted>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::AddOrderMPIDMessage>(message, length, std::forward<Handler>(handler));
+        case MessageType::OrderExecuted:
+            return parseAs<Itch::OrderExecutedMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::OrderExecutedWithPrice:
-            return parseAs<OrderExecutedWithPrice>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::OrderExecutedWithPriceMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::OrderCancel:
-            return parseAs<OrderCancel>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::OrderCancelMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::OrderDelete:
-            return parseAs<OrderDelete>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::OrderDeleteMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::OrderReplace:
-            return parseAs<OrderReplace>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::OrderReplaceMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::SystemEvent:
-            return parseAs<SystemEvent>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::SystemEventMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::StockDirectory:
-            return parseAs<StockDirectory>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::StockDirectoryMessage>(message, length, std::forward<Handler>(handler));
         case MessageType::StockTradingAction:
-            return parseAs<StockTradingAction>(message, length, std::forward<Handler>(handler));
+            return parseAs<Itch::StockTradingActionMessage>(message, length, std::forward<Handler>(handler));
         default:
-            return ParseStatus::UnknownMessageType;
+        {
+            ParseResult result{
+                .status = ParseStatus::UnknownMessageType,
+                .bytes = length};
+            return result;
+        }
         }
     }
 }

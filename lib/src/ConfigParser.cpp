@@ -23,7 +23,6 @@ Config ConfigParser::parseConfig()
     try
     {
         Config config{
-            .port = _configData.at("port"),
             .replaySpeed = _configData.at("replay_speed"),
             .nasdaqHistoricalFilePath = _configData.at("nasdaq_historical_file_path")};
         const auto &instruments = _configData.at("instruments");

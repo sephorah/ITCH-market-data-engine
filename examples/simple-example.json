@@ -1,5 +1,4 @@
 {
-  "port": 8080,
   "replay_speed": 1.0,
   "nasdaq_historical_file_path": "examples/itch_50mb.bin",
   "instruments": [
