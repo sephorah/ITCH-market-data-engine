@@ -3,6 +3,8 @@
 
 #include "ItchEnums.hpp"
 
+// Disable padding
+#pragma pack(push, 1)
 namespace Itch
 {
     struct TimeStamp
@@ -12,7 +14,7 @@ namespace Itch
 
     struct IssueSubType
     {
-        uint8_t data[2];
+        char data[2];
     };
 
     struct AddOrderMessage
@@ -63,7 +65,7 @@ namespace Itch
         uint32_t executedShares;
         uint64_t matchNumber;
         Printable printable;
-        float price;
+        uint32_t price;
     };
 
     struct OrderCancelMessage
@@ -94,7 +96,7 @@ namespace Itch
         uint64_t originalOrderRefNum;
         uint64_t newOrderRefNum;
         uint32_t shares;
-        float price;
+        uint32_t price;
     };
 
     struct SystemEventMessage
@@ -117,12 +119,13 @@ namespace Itch
         FinancialStatusIndicator financialStatusIndicator;
         uint32_t roundLotSize;
         RoundLotsOnly roundLotsOnly;
+        IssueClassification issueClassification;
         IssueSubType issueSubType;
         Authenticity authenticity;
         ShortSaleThresholdIndicator shortSaleThresholdIndicator;
-        IPOFlag IPOFlag;
-        LULDReferencePriceTier LULDReferencePriceTier;
-        ETPFlag ETPFlag;
+        enum IPOFlag IPOFlag;
+        enum LULDReferencePriceTier LULDReferencePriceTier;
+        enum ETPFlag ETPFlag;
         uint32_t ETPLeverageFactor;
         InverseIndicator inverseIndicator;
     };
@@ -135,9 +138,11 @@ namespace Itch
         TimeStamp timeStamp;
         char stock[8];
         TradingState tradingState;
-        uint8_t reserved;
-        uint32_t reason;
+        char reserved;
+        char reason[4];
     };
 };
+// Restore padding
+#pragma pack(pop)
 
 #endif /* !ITCHMESSAGES_HPP_ */

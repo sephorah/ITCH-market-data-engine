@@ -5,7 +5,7 @@
 
 namespace Itch
 {
-    enum class MessageType : uint8_t
+    enum class MessageType : char
     {
         AddOrder = 'A',
         AddOrderMPID = 'F',
@@ -19,19 +19,19 @@ namespace Itch
         StockTradingAction = 'H'
     };
 
-    enum class BuySell : uint8_t
+    enum class BuySell : char
     {
         BuyOrder = 'B',
         SellOrder = 'S'
     };
 
-    enum class Printable : uint8_t
+    enum class Printable : char
     {
         NonPrintable = 'N',
         Printable = 'Y'
     };
 
-    enum class EventCode : uint8_t
+    enum class EventCode : char
     {
         MessagesStart = 'O',
         SystemHoursStart = 'S',
@@ -41,7 +41,7 @@ namespace Itch
         MessagesEnd = 'C'
     };
 
-    enum class MarketCategory : uint8_t
+    enum class MarketCategory : char
     {
         NasdaqGlobalSelectMarket = 'Q',
         NasdaqGlobalMarket = 'G',
@@ -54,7 +54,7 @@ namespace Itch
         NotAvailable = ' '
     };
 
-    enum class FinancialStatusIndicator : uint8_t
+    enum class FinancialStatusIndicator : char
     {
         Deficient = 'D',
         Delinquent = 'E',
@@ -69,13 +69,13 @@ namespace Itch
         NotAvailable = ' ',
     };
 
-    enum class RoundLotsOnly : uint8_t
+    enum class RoundLotsOnly : char
     {
         OnlyAcceptRoundLots = 'Y',
         NoOrderSizeRestrictions = 'N'
     };
 
-    enum class IssueClarificationValues : uint8_t
+    enum class IssueClassification : char
     {
         AmericanDepositaryShare = 'A',
         Bond = 'B',
@@ -95,47 +95,67 @@ namespace Itch
         Warrant = 'W'
     };
 
-    enum class Authenticity : uint8_t
+    enum class IssueClarificationValues : char
+    {
+        AmericanDepositaryShare = 'A',
+        Bond = 'B',
+        CommonStock = 'C',
+        DepositoryReceipt = 'F',
+        I144A = 'I',
+        LimitedPartnership = 'L',
+        Notes = 'N',
+        OrdinaryShare = 'O',
+        PreferredStock = 'P',
+        OtherSecurities = 'Q',
+        Right = 'R',
+        SharesofBeneficialInterest = 'S',
+        ConvertibleDebenture = 'T',
+        Unit = 'U',
+        UnitsBenifInt = 'V',
+        Warrant = 'W'
+    };
+
+    enum class Authenticity : char
     {
         Live = 'P',
         Test = 'T',
     };
 
-    enum class ShortSaleThresholdIndicator : uint8_t
+    enum class ShortSaleThresholdIndicator : char
     {
         RestrictedIssue = 'Y',
         NotRestricitedIssue = 'N',
         NotAvailable = ' ',
     };
 
-    enum class IPOFlag : uint8_t
+    enum class IPOFlag : char
     {
         IPOSecurity = 'Y',
         NotIPOSecurity = 'N',
         NotAvailable = ' ',
     };
 
-    enum class LULDReferencePriceTier : uint8_t
+    enum class LULDReferencePriceTier : char
     {
         Tier1 = '1',
         Tier2 = '2',
         NotAvailable = ' ',
     };
 
-    enum class ETPFlag : uint8_t
+    enum class ETPFlag : char
     {
         ETP = 'Y',
         NotETP = 'N',
         NotAvailable = ' ',
     };
 
-    enum class InverseIndicator : uint8_t
+    enum class InverseIndicator : char
     {
         InverseETP = 'Y',
         NotInverseETP = 'N'
     };
 
-    enum class TradingState : uint8_t
+    enum class TradingState : char
     {
         Halted = 'H',
         Paused = 'P',

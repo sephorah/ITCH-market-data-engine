@@ -22,7 +22,6 @@ struct Instrument
 
 struct Config
 {
-    std::size_t port;
     double replaySpeed;
     std::string nasdaqHistoricalFilePath;
     std::unordered_map<std::size_t, Instrument> instruments;

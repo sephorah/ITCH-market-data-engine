@@ -11,8 +11,9 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
 find_package(cxxopts REQUIRED)
 find_package(nlohmann_json REQUIRED)
+find_package(GTest REQUIRED)
 
-add_library(${PROJECT_NAME} SHARED src/ArgParser.cpp src/ConfigParser.cpp src/FeedHandler.cpp)
+add_library(${PROJECT_NAME} SHARED src/ConfigParser.cpp src/Engine.cpp)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
@@ -24,3 +25,6 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     cxxopts::cxxopts
     nlohmann_json::nlohmann_json)
+
+enable_testing()
+add_subdirectory(tests)
