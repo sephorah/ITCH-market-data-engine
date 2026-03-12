@@ -28,7 +28,7 @@ Currently in development.
 |------|---------|-------------|
 | `A` | `AddOrder` | A new order has been accepted and was added to the order book (no MPID attribution). |
 | `F` | `AddOrderMPID` | A new order has been accepted and was added to the order book (MPID attribution). |
-| `E` | `OrderExecuted` | An order on the book was executed in whole or in part |
+| `E` | `OrderExecuted` | An order on the book was executed in whole or in part at its display price. |
 | `C` | `OrderExecutedWithPrice` | An order on the book was executed in whole or in part at a price different from the initial display price. |
 | `X` | `OrderCancel` | An order on the book was partially canceled, which reduces shares on an existing order. |
 | `D` | `OrderDelete` | An order on the book was cancelled entirely and must be removed from the book. |
