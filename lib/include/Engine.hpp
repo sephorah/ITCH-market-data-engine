@@ -14,7 +14,7 @@
 #include "ItchParser.hpp"
 #include "Printer.hpp"
 
-#define BUFFER_SIZE (64 * 1024)
+static constexpr std::size_t BUFFER_SIZE = 64 * 1024;
 
 class Engine
 {

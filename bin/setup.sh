@@ -15,8 +15,15 @@ build() {
 clean() {
     echo "Cleaning ITCH Market Data Engine..."
     cmake --build --target clean --preset conan-release
-    rm -f MarketDataSimulatorServer
     echo "Done."
+}
+
+tests() {
+    echo -e "Run ITCH Market Data Engine tests...\n"
+    echo -e "--------- Parser tests ---------"
+    ./build/Release/bin/ParserTests
+    echo -e "\n--------- Engine tests ---------"
+    ./build/Release/bin/EngineTests examples/simple-example.json
 }
 
 case "$1" in
@@ -29,8 +36,11 @@ case "$1" in
     clean)
         clean
         ;;
+    tests)
+        tests
+        ;;
     *)
-        echo "Usage: $0 {install|build|clean}"
+        echo "Usage: $0 {install|build|clean|tests}"
         exit 1
         ;;
 esac

@@ -6,14 +6,6 @@ Engine::Engine(const std::string &configFilename)
     {
         ConfigParser configParser(configFilename);
         Config config = configParser.parseConfig();
-
-        // std::cout << "CONFIG" << std::endl;
-        // std::cout << config.replaySpeed << std::endl
-        //           << config.nasdaqHistoricalFilePath << std::endl;
-        // for (const auto &[key, value] : config.instruments)
-        // {
-        //     std::cout << key << " " << value.symbol << " " << value.specs.depth << " " << value.specs.enabled << " " << std::endl;
-        // }
         _itchFilename = config.nasdaqHistoricalFilePath;
     }
     catch (const std::exception &e)
@@ -25,82 +17,52 @@ Engine::Engine(const std::string &configFilename)
 void Engine::run()
 {
     std::ifstream itchFile(_itchFilename, std::ios::binary);
-    char *buffer = new char[BUFFER_SIZE];
-    std::size_t leftoversBytes = 0;
+    auto buffer = std::make_unique<char[]>(BUFFER_SIZE);
+    Printer printer;
 
     if (!itchFile)
     {
         throw std::runtime_error("Failed to open " + _itchFilename);
     }
-    while (itchFile)
+    std::size_t leftoversBytes = 0;
+    std::size_t bytesRead = 0;
+    std::size_t count = 0;
+    std::size_t baseOffset = 0;
+    std::size_t unknownCount = 0;
+    while (true)
     {
-        itchFile.read(buffer, BUFFER_SIZE);
-        std::size_t count = itchFile.gcount();
-
-        std::size_t baseOffset = leftoversBytes;
-
-        while (baseOffset < count)
+        itchFile.read(buffer.get() + leftoversBytes, BUFFER_SIZE - leftoversBytes);
+        bytesRead = itchFile.gcount();
+        if (bytesRead == 0)
+            break;
+        count = bytesRead + leftoversBytes;
+        baseOffset = 0;
+        while (true)
         {
-            std::size_t length = count - baseOffset;
-            Itch::ParseResult result = Itch::parse(buffer + baseOffset, length, Printer());
-
-            if (result.status == Itch::ParseStatus::Truncated)
+            if (baseOffset + 2 > count)
             {
-                memmove(buffer, buffer + baseOffset, result.bytes);
-                leftoversBytes = result.bytes;
+                leftoversBytes = count - baseOffset;
+                std::memmove(buffer.get(), buffer.get() + baseOffset, leftoversBytes);
+                break;
+            }
+            uint16_t bigEndianLength;
+            std::memcpy(&bigEndianLength, buffer.get() + baseOffset, sizeof(bigEndianLength));
+            std::size_t length = __builtin_bswap16(bigEndianLength);
+            baseOffset += 2;
+            if (baseOffset + length > count)
+            {
+                leftoversBytes = count - baseOffset + 2;
+                std::memmove(buffer.get(), buffer.get() + baseOffset - 2, leftoversBytes);
                 break;
             }
             else
             {
+                Itch::ParseResult result = Itch::parse(buffer.get() + baseOffset, length, printer);
                 baseOffset += result.bytes;
+                if (result.status == Itch::ParseStatus::UnknownMessageType)
+                    unknownCount++;
             }
-
-            // count = 39;
-
-            // offset = 0;
-            // length = count - offset = 39;
-            // "|oooooooooooooooooooooooooooooooooooooo";
-
-            // message length => 5
-
-            // offset += result.bytes = 0 + 5 = 5;
-            // length = count - offset = 34;
-            // "ooooo|ooooooooooooooooooooooooooooooooo";
-
-            // message length => 17;
-
-            // offset += result.bytes = 5 + 17 = 22;
-            // length = count - offset = 39 - 22 = 17;
-            // "oooooooooooooooooooooo|oooooooooooooooo";
-
-            // message length => 17;
-
-            // offset += result.bytes = 22 + 17 = 39;
-            // length = count - offset = 39 - 39 = 0;
-            // "oooooooooooooooooooooooooooooooooooooo|";
-
-            // if result.status == truncated => quit loop, leftoverBytes = result.bytes;
-            //  new loop with baseOffset = leftoverBytes;
         }
-
-        // std::size_t baseOffset = 0;
-
-        // std::size_t i = 0;
-
-        // // while (buffer[i] != '\0') {
-        // //     auto status = Itch::parse(buffer + baseOffset, )
-
-        // // }
-
-        // // for (size_t i = 0; buffer[i] != '\0'; ++i) {
-        // //     auto status = Itch::parse(buffer)
-        // // }
-
-        // // auto status = Itch::parse(msg, sizeof msg, Printer());
-        // if (!count)
-        // {
-        //     break;
-        // }
     }
-    delete[] buffer;
+    std::cout << "Unknown messages count: " << unknownCount << std::endl;
 }

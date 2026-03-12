@@ -20,6 +20,7 @@ struct Printer
     {
         printCommon(msg);
         std::cout << "Event Code: " << static_cast<char>(msg.eventCode) << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::StockDirectoryMessage &msg) const
@@ -30,6 +31,7 @@ struct Printer
         std::cout << "Financial Status: " << static_cast<char>(msg.financialStatusIndicator) << std::endl;
         std::cout << "Round Lot Size: " << msg.roundLotSize << std::endl;
         std::cout << "Round Lots Only: " << static_cast<char>(msg.roundLotsOnly) << std::endl;
+        std::cout << "Issue Classification: " << static_cast<char>(msg.issueClassification) << std::endl;
         std::cout << "Issue Sub-Type: " << std::string(msg.issueSubType.data, 2) << std::endl;
         std::cout << "Authenticity: " << static_cast<char>(msg.authenticity) << std::endl;
         std::cout << "Short Sale Threshold: " << static_cast<char>(msg.shortSaleThresholdIndicator) << std::endl;
@@ -38,6 +40,7 @@ struct Printer
         std::cout << "ETP Flag: " << static_cast<char>(msg.ETPFlag) << std::endl;
         std::cout << "ETP Leverage Factor: " << msg.ETPLeverageFactor << std::endl;
         std::cout << "Inverse Indicator: " << static_cast<char>(msg.inverseIndicator) << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::StockTradingActionMessage &msg) const
@@ -47,6 +50,7 @@ struct Printer
         std::cout << "Trading State: " << static_cast<char>(msg.tradingState) << std::endl;
         std::cout << "Reserved: " << msg.reserved << std::endl;
         std::cout << "Reason: " << msg.reason << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::AddOrderMessage &msg) const
@@ -57,6 +61,7 @@ struct Printer
         std::cout << "Shares: " << msg.shares << std::endl;
         std::cout << "Stock: " << std::string(msg.stock, 8) << std::endl;
         std::cout << "Price: " << msg.price / 10000.0 << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::AddOrderMPIDMessage &msg) const
@@ -68,6 +73,7 @@ struct Printer
         std::cout << "Stock: " << std::string(msg.stock, 8) << std::endl;
         std::cout << "Price: " << msg.price / 10000.0 << std::endl;
         std::cout << "Attribution: " << std::string(msg.attribution, 4) << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::OrderExecutedMessage &msg) const
@@ -76,6 +82,7 @@ struct Printer
         std::cout << "Order Reference: " << msg.orderRefNum << std::endl;
         std::cout << "Executed Shares: " << msg.executedShares << std::endl;
         std::cout << "Match Number: " << msg.matchNumber << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::OrderExecutedWithPriceMessage &msg) const
@@ -86,6 +93,7 @@ struct Printer
         std::cout << "Match Number: " << msg.matchNumber << std::endl;
         std::cout << "Printable: " << static_cast<char>(msg.printable) << std::endl;
         std::cout << "Price: " << msg.price / 10000.0 << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::OrderCancelMessage &msg) const
@@ -93,12 +101,14 @@ struct Printer
         printCommon(msg);
         std::cout << "Order Reference: " << msg.orderRefNum << std::endl;
         std::cout << "Cancelled Shares: " << msg.cancelledShares << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::OrderDeleteMessage &msg) const
     {
         printCommon(msg);
         std::cout << "Order Reference: " << msg.orderRefNum << std::endl;
+        std::cout << std::endl;
     }
 
     void operator()(const Itch::OrderReplaceMessage &msg) const
@@ -108,6 +118,7 @@ struct Printer
         std::cout << "New Order Reference: " << msg.newOrderRefNum << std::endl;
         std::cout << "Shares: " << msg.shares << std::endl;
         std::cout << "Price: " << msg.price / 10000.0 << std::endl;
+        std::cout << std::endl;
     }
 };
 

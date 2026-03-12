@@ -39,6 +39,7 @@
 
 # debug information files
 *.dwo
+vgcore.*
 
 CMakeLists.txt.user
 CMakeCache.txt
@@ -52,4 +53,4 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
-examples/itch_*.bin
+examples/sample_*.itch

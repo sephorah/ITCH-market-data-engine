@@ -1,8 +1,29 @@
 # ITCH Market Data Engine
 
-This project is a C++ library that parses ITCH messages sequentially and builds order books, exposed to Python through pybind11 for analysis.
+This project is a C++20 library that parses NASDAQ TotalView-ITCH 5.0 messages and reconstructs per-instrument order books, exposed to Python through pybind11 for market microstructure analysis.
 
 Currently in development.
+
+## Features
+
+### ITCH parser
+
+- Read binary ITCH file sequentially
+- Handle endianness (from big-endian to little-endian)
+- Minimizes overhead by reading directly from the buffer
+
+### Supported messages 
+- `Add Order` (type `A`)
+- `Add Order with MPID` (type `F`)
+- `Order Executed` (type `E`)
+- `Order Executed with Price` (type `C`)
+- `Order Cancel` (type `X`)
+- `Order Delete` (type `D`)
+- `Order Replace`  (type `U`)
+- `System Event` (type `S`)
+- `Stock Directory` (type `R`)
+- `Stock Trading Action`  (type `H`)
+
 
 ## Architecture diagram
 
@@ -52,11 +73,6 @@ flowchart TD
 - Build system: [CMake](https://cmake.org/), a cross-platform build system generator.
 - Package manager: [Conan](https://conan.io/), a C/C++ dependency manager widely used in production environments.
 
-### Librairies
-
-- [cxxopts](https://github.com/jarro2783/cxxopts): a lightweight C++ command line option parser.
-
-
 ## Getting started
 
 ### Requirements
@@ -74,6 +90,8 @@ conan profile detect --force
 ### Dataset
 
 Download raw ITCH 5.0 data `01302020.NASDAQ_ITCH50.gz` from `https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/`.
+
+Small samples are available in `examples/` folder.
 
 The data format is defined by the document [Nasdaq TotalView-ITCH 5.0](https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf).
 
@@ -95,5 +113,7 @@ cd ITCH-market-data-engine
 ./bin/setup.sh build
 ```
 
-4. Run the project.
-
+4. Run tests.
+```sh
+./bin/setup.sh tests
+```

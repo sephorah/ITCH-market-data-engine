@@ -1,6 +1,6 @@
 {
   "replay_speed": 1.0,
-  "nasdaq_historical_file_path": "examples/itch_50mb.bin",
+  "nasdaq_historical_file_path": "examples/sample_10mb.itch",
   "instruments": [
     {
       "id": 1,

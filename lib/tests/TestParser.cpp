@@ -62,7 +62,6 @@ TEST(ItchParser, ParseStockDirectoryMessage)
     ASSERT_EQ(static_cast<char>(captureMessage.stockDirectory.roundLotsOnly), 'N');
     ASSERT_EQ(static_cast<char>(captureMessage.stockDirectory.issueClassification), 'C');
     ASSERT_EQ(std::string(captureMessage.stockDirectory.issueSubType.data, 2), "Z ");
-    // ASSERT_EQ(captureMessage.stockDirectory.issueSubType.data[1], ' ');
     ASSERT_EQ(static_cast<char>(captureMessage.stockDirectory.authenticity), 'P');
     ASSERT_EQ(static_cast<char>(captureMessage.stockDirectory.shortSaleThresholdIndicator), 'N');
     ASSERT_EQ(static_cast<char>(captureMessage.stockDirectory.IPOFlag), ' ');
@@ -193,7 +192,7 @@ TEST(ItchParser, ParseOrderExecutedWithPriceMessage)
         '\x1F', '\x1A', '\xCE', '\xD9', '\xF0', '\x00',                 // Timestamp: 34,200,000,000,000 ns
         '\x00', '\x00', '\x00', '\x00', '\x00', '\x01', '\x1E', '\xCD', // Order Reference: 73421
         '\x00', '\x00', '\x00', '\x32',                                 // Executed Shares: 50
-        '\x00', '\x00', '\x00', '\x00', '\x00', '\x08', '\x64', '\xEB',  // Match Number: 550123
+        '\x00', '\x00', '\x00', '\x00', '\x00', '\x08', '\x64', '\xEB', // Match Number: 550123
         'Y',                                                            // Printable: 'Y'
         '\x00', '\x16', '\xE3', '\x60'                                  // Execution Price: 1,500,000 ($150.00)
     };
@@ -284,16 +283,6 @@ TEST(ItchParser, ParseOrderReplaceMessage)
     ASSERT_EQ(captureMessage.orderReplace.price, 1536000);
 }
 
-TEST(ItchParser, ParseTruncatedMessage)
-{
-    const char truncated[] = {'S', '\x04'};
-
-    CaptureMessage captureMessage;
-    Itch::ParseResult result = Itch::parse(truncated, sizeof(truncated), captureMessage);
-
-    ASSERT_EQ(result.status, Itch::ParseStatus::Truncated);
-}
-
 TEST(ItchParser, ParseUnknownMessageType)
 {
     const char unknown[] = {'?', '\x00', '\x00'};
@@ -302,14 +291,6 @@ TEST(ItchParser, ParseUnknownMessageType)
     Itch::ParseResult result = Itch::parse(unknown, sizeof(unknown), captureMessage);
 
     ASSERT_EQ(result.status, Itch::ParseStatus::UnknownMessageType);
-}
-
-TEST(ItchParser, ParseEmptyMessage)
-{
-    CaptureMessage captureMessage;
-    Itch::ParseResult result = Itch::parse("", 0, captureMessage);
-
-    ASSERT_EQ(result.status, Itch::ParseStatus::Truncated);
 }
 
 int main(int argc, char **argv)

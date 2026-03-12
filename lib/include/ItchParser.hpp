@@ -13,7 +13,6 @@ namespace Itch
     {
         OK,
         UnknownMessageType,
-        Truncated,
     };
 
     struct ParseResult
@@ -25,14 +24,6 @@ namespace Itch
     template <typename MsgType, typename Handler>
     ParseResult parseAs(const char *buffer, std::size_t length, Handler &&handler)
     {
-        if (length < sizeof(MsgType))
-        {
-            ParseResult result{
-                .status = ParseStatus::Truncated,
-                .bytes = length,
-            };
-            return result;
-        }
         MsgType message{*reinterpret_cast<const MsgType *>(buffer)};
         networkToHost(message);
         handler(message);
@@ -46,13 +37,6 @@ namespace Itch
     template <typename Handler>
     ParseResult parse(const char *message, size_t length, Handler &&handler)
     {
-        if (length < 1)
-        {
-            ParseResult result{
-                .status = ParseStatus::Truncated,
-                .bytes = length};
-            return result;
-        }
         switch (MessageType(message[0]))
         {
         case MessageType::AddOrder:
