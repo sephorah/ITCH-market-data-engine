@@ -8,22 +8,31 @@ Currently in development.
 
 ### ITCH parser
 
-- Read binary ITCH file sequentially
-- Handle endianness (from big-endian to little-endian)
-- Minimizes overhead by reading directly from the buffer
+- Read binary ITCH file sequentially.
+- Handle endianness (from big-endian to little-endian).
+- Minimizes overhead by reading directly from the buffer.
 
-### Supported messages 
-- `Add Order` (type `A`)
-- `Add Order with MPID` (type `F`)
-- `Order Executed` (type `E`)
-- `Order Executed with Price` (type `C`)
-- `Order Cancel` (type `X`)
-- `Order Delete` (type `D`)
-- `Order Replace`  (type `U`)
-- `System Event` (type `S`)
-- `Stock Directory` (type `R`)
-- `Stock Trading Action`  (type `H`)
+### Supported ITCH 5.0 Messages
 
+#### Stock related messages
+
+| Type | Message | Description |
+|------|---------|-------------|
+| `S` | `SystemEvent` | Used to signal a market or data feed handler event. |
+| `R` | `StockDirectory` | Sent at the start of each trading day for all active symbols. |
+| `H` | `StockTradingAction` | Indicate the current trading status of a security: halted (H), paused (P), quote-only (Q), or trading (T). |
+
+#### Order related messages
+
+| Type | Message | Description |
+|------|---------|-------------|
+| `A` | `AddOrder` | A new order has been accepted and was added to the order book (no MPID attribution). |
+| `F` | `AddOrderMPID` | A new order has been accepted and was added to the order book (MPID attribution). |
+| `E` | `OrderExecuted` | An order on the book was executed in whole or in part |
+| `C` | `OrderExecutedWithPrice` | An order on the book was executed in whole or in part at a price different from the initial display price. |
+| `X` | `OrderCancel` | An order on the book was partially canceled, which reduces shares on an existing order. |
+| `D` | `OrderDelete` | An order on the book was cancelled entirely and must be removed from the book. |
+| `U` | `OrderReplace` | An order on the book was cancelled and replaced with a new order. |
 
 ## Architecture diagram
 
