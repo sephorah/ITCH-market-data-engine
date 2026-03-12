@@ -91,7 +91,7 @@ conan profile detect --force
 
 Download raw ITCH 5.0 data `01302020.NASDAQ_ITCH50.gz` from `https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/`.
 
-Small samples are available in `examples/` folder.
+Samples are available in `examples/` folder.
 
 The data format is defined by the document [Nasdaq TotalView-ITCH 5.0](https://www.nasdaqtrader.com/content/technicalsupport/specifications/dataproducts/NQTVITCHspecification.pdf).
 
