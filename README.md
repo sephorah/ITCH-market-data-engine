@@ -1,6 +1,6 @@
 # ITCH Market Data Engine
 
-This project's goal is to create a C++20 library, exposed to Python through pybind11, that parses NASDAQ TotalView-ITCH 5.0 messages and reconstructs per-instrument order books for market microstructure analysis.
+The goal is to create a C++20 library, exposed to Python through pybind11, that parses NASDAQ TotalView-ITCH 5.0 messages and reconstructs per-instrument order books for market microstructure analysis.
 
 ## Current status
 
