@@ -1,10 +1,8 @@
 # ITCH Market Data Engine
 
-This project is a C++20 library that parses NASDAQ TotalView-ITCH 5.0 messages and reconstructs per-instrument order books, exposed to Python through pybind11 for market microstructure analysis.
+This project's goal is to create a C++20 library, exposed to Python through pybind11, that parses NASDAQ TotalView-ITCH 5.0 messages and reconstructs per-instrument order books for market microstructure analysis.
 
-Currently in development.
-
-## Features
+## Current status
 
 ### ITCH parser
 
@@ -39,31 +37,31 @@ Currently in development.
 ```mermaid
 flowchart TD
 
-    config_file["**Configuration file** with instruments details (ID, symbol, order book depth)"]
+    config_file["Configuration file with instruments details (ID, symbol, order book depth)"]
     
-    nasdaq_itch_file[**NASDAQ TotalView-ITCH 5.0 historical file**<br/>• Replayed as a continuous event stream, providing level 3 market data]
+    nasdaq_itch_file[NASDAQ TotalView-ITCH 5.0 historical file<br/>• Replayed as a continuous event stream, providing level 3 market data]
 
-    subgraph cpp_server[**C++ library**]
+    subgraph cpp_server[C++ library]
 
-        itch_parser["**ITCH Parser**<br/>• Decodes ITCH messages and emits normalized order events"]
+        itch_parser["ITCH Parser<br/>• Decodes ITCH messages and emits normalized order events"]
 
-        order_book_manager[**Order book manager**<br/>• Applies events to maintain order book state<br/>• Manages order books for all instruments]
+        order_book_manager[Order book manager<br/>• Applies events to maintain order book state<br/>• Manages order books for all instruments]
         
-        order_book[**Order book**<br/>• Lists bids and asks for an instrument]
+        order_book[Order book<br/>• Lists bids and asks for an instrument]
 
-        pybind11_interface[**Pybind11 bindings**<br/>• Exposes C++ API to Python<br/>• Zero-copy data transfer via NumPy arrays]
+        pybind11_interface[Pybind11 bindings<br/>• Exposes C++ API to Python<br/>• Zero-copy data transfer via NumPy arrays]
     end
 
-    subgraph python_layer[**Python Research layer**]
+    subgraph python_layer[Python Research layer]
 
-        update_buffers[**Update buffers per instrument**<br/>• Maintains separate buffer per instrument<br/>• Collects updates up to 1000 per instrument]
+        update_buffers[Update buffers per instrument<br/>• Maintains separate buffer per instrument<br/>• Collects updates up to 1000 per instrument]
 
-        polars_processing[**Polars processing**<br/>• Processes each instrument independently<br/>• Triggers when instrument reaches 1000 updates<br/>• Extracts features and saves to Parquet]
+        polars_processing[Polars processing<br/>• Processes each instrument independently<br/>• Triggers when instrument reaches 1000 updates<br/>• Extracts features and saves to Parquet]
     end
 
-    parquet_files[**Parquet files**]
+    parquet_files[Parquet files]
     
-    pandas_analysis[**Pandas analysis**<br/>• Jupyter notebooks<br/>• Loads Parquet files for statistical analysis and visualizations]
+    pandas_analysis[Pandas analysis<br/>• Jupyter notebooks<br/>• Loads Parquet files for statistical analysis and visualizations]
 
 
     config_file -->|Specifies instruments to observe| order_book_manager
