@@ -6,9 +6,9 @@ The goal is to create a C++20 library, exposed to Python through pybind11, that 
 
 ### ITCH parser
 
-- Read binary ITCH file sequentially.
-- Handle endianness (from big-endian to little-endian).
-- Minimizes overhead by reading directly from the buffer.
+- Reads binary ITCH file sequentially.
+- Handles endianness (from big-endian to little-endian).
+- Reads the file in fixed-size chunks and handles split messages between two chunks.
 
 ### Supported ITCH 5.0 Messages
 
