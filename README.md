@@ -54,10 +54,6 @@ flowchart TD
     itch_parser --> handler
 ```
 
-## Roadmap
-
-Planned: order book reconstruction, Python bindings, and a Python layer for analysis.
-
 ## Stack
 
 - Build system: [CMake](https://cmake.org/), a cross-platform build system generator.
